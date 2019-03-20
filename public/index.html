@@ -10,29 +10,17 @@
         <!-- Next, include three.ar.js; add the speech recognition polyfill if you want. -->
         <script src="https://rawgit.com/google-ar/three.ar.js/f9603ee/dist/three.ar.js"></script>
         <!-- Last, include aframe-ar. -->
-        <script src="https://rawgit.com/chenzlabs/aframe-ar/47aa7fa/dist/aframe-ar.min.js"></script>
-        
+        <script src="https://rawgit.com/chenzlabs/aframe-ar/47aa7fa/dist/aframe-ar.min.js"></script>        
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/webpack-cesium/1.37.0/webpack.cesium.js"></script> -->
         <script src="https://cesiumjs.org/releases/1.54/Build/Cesium/Cesium.js"></script>
         <script src="dist/aframe-aterrain-component.min.js"></script>
-
+        <script src="https://unpkg.com/aframe-environment-component@1.0.0/dist/aframe-environment-component.min.js"></script>
         <script src="https://browser.sentry-cdn.com/4.6.1/bundle.min.js" crossorigin="anonymous"></script>
         <script>
             Sentry.init({ dsn: 'https://89bc7cd898824b7993b9ee709067d2d5@sentry.io/1397296' });
         </script>
     </head>
     <body>
-        <a-scene ar stats>
-            <!-- note that even in vr use cases setting observer=camera should still work even though there's a parent cameraRig -->
-            <a-entity id="world" position="0 1.71302 -1.09839" visible="true" a-terrain="
-                lod: 0;
-                stretch: 4;
-                radius:0.1;
-                latitude:57.129755;
-                longitude:-2.116963;
-                world_radius:63727982;
-            ">
-            </a-entity>
-        </a-scene>
+        <div id="root"></div>
     </body>
 </html>
