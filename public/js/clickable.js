@@ -5,7 +5,7 @@ AFRAME.registerComponent('ship-events', {
             // alert('test');
             // console.log('test');
             //  0.00001 0.00001
-            $("#test").show();
+            $('#shipPopup').modal('show');
             el.setAttribute('scale', {x: 0.0001, y: 0.0001, z: 0.0001});
         });
     }

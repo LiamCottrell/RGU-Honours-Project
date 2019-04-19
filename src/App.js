@@ -17,7 +17,7 @@ class App extends React.Component {
 class Boat extends React.Component {
     render() {
         return (
-            <a-entity a-location="lat:57.1186191; lon:-2.1397003393363447; radius:0.15; mode:relative; elevation:0">
+            <a-entity a-location="lat:60.27432; lon:-1.08595; radius:0.15; mode:relative; elevation:0">
                 <a-entity rotation="-90 0 0">
                     <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
                     </a-gltf-model>
@@ -44,15 +44,30 @@ class Earth extends React.Component{
         )
     }
 }
-let divStyle = {
-    display: 'none'
-};
+
+
 class Popup extends React.Component{
 
     render() {
         return (
-            <div id='test' style={divStyle}>
-                <h1>tests</h1>
+            <div className="modal fade" id="shipPopup" tabIndex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                           testicle
+                        </div>
+                        <div className="modal-footer">
+                            <button id="closePopup" type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
