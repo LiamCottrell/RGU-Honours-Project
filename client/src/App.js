@@ -29,6 +29,7 @@ class App extends React.Component {
             .then( data => _.where(data, { MMSI: parseInt(id, 10) } ))
             .then(data => this.setState({ id , data }))
     };
+
     render() {
         let { data }  = this.state;
         console.log(data);
@@ -73,7 +74,7 @@ class EarthObj extends React.Component {
             >
                 {
                     isBoat ? (
-                            <Boat />
+                            <Boat data={this.props.data} />
                         )
                         :
                         (
@@ -113,6 +114,7 @@ class Earth extends React.Component{
                             return (<EarthObj
                                         key={name}
                                         boat={true}
+                                        data={Object.values(boatPos)[index]}
                                         Lat={Object.values(boatPos)[index].Latitude}
                                         Lon={Object.values(boatPos)[index].Longitude}
                                     />)
@@ -129,11 +131,21 @@ class Earth extends React.Component{
 
 class Boat extends React.Component{
     render() {
+        console.log('this is the dom data');
+        console.log(this.props.data);
         return (
-            <a-entity rotation="-90 0 0">
-                <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
-                </a-gltf-model>
-                <a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>
+            <a-entity  rotation="-90 0 0">
+                <a-gltf-model
+                    data-mmsi={this.props.data.MMSI}
+                    data-recvtime={this.props.data.RecvTime.$date}
+                    data-posacc={this.props.data.PositionAccuracy}
+                    data-lat={this.props.data.Latitude}
+                    data-lon={this.props.data.Longitude}
+                    ship-events
+                    scale="0.00002 0.00002 0.00002"
+                    src="boat.glb"
+                />
+                {/*<a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>*/}
             </a-entity>
         )
     }
@@ -163,7 +175,7 @@ class Popup extends React.Component{
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body">
+                        <div id="shipContent" className="modal-body">
                            testicle
                         </div>
                         <div className="modal-footer">
