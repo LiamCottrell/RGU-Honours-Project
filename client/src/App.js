@@ -1,11 +1,44 @@
 import React from 'react';
 
+import queryString from 'query-string'
+
+const _ = require('underscore');
+
 
 class App extends React.Component {
+    // Initialize the state
+    constructor(props){
+        super(props);
+        this.state = {
+            id: null,
+            data: {}
+        }
+    }
+    componentDidMount() {
+        const values = queryString.parse(this.props.location.search);
+        if (values.MMSI) {
+            this.getDataMMSI(values.MMSI);
+        }
+
+
+    }
+    getDataMMSI = (id) => {
+        fetch('/api/getData')
+            .then(res => res.json())
+            .then( data => _.where(data, { MMSI: parseInt(id, 10) } ))
+            .then(data => this.setState({ id , data }))
+    };
     render() {
+        let { data }  = this.state;
+        console.log(data);
         return (
             <a-scene ar stats >
-                <Earth />
+                { data ? (
+                    <Earth data = { data } />
+                ) : (
+                    <Earth />
+                    )
+                }
                 <Popup />
                 <Camera />
             </a-scene>

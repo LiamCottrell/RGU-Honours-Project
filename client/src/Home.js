@@ -10,7 +10,7 @@ class Home extends React.Component {
             <div className="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
                 <header className="masthead mb-auto">
                     <div className="inner">
-                        <h3 className="masthead-brand">A Ship</h3>
+                        <h3 className="masthead-brand">Ship Honours Project</h3>
                         <nav className="nav nav-masthead justify-content-center">
                             <a className="nav-link active" href="/">Home</a>
                             <a className="nav-link" href="/world">World</a>
@@ -72,7 +72,7 @@ class BoatOptions extends React.Component {
     };
     // Create a list of boat options from the dataset.
     render() {
-        const { data }  = this.state;
+        const { data } = this.state;
         // console.log(data);
         const unique = _.countBy(data, function (o) {
             return o.MMSI;
