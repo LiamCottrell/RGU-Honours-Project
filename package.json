@@ -1,33 +1,14 @@
 {
-    "name": "RGU_Honours_Project",
-    "version": "1.0.0",
-    "main": "index.js",
-    "repository": "https://github.com/LiamCottrell/RGU-Honours-Project.git",
-    "author": "Liam Cottrell <liamcottrell@hotmail.co.uk>",
-    "license": "MIT",
-    "private": true,
-    "dependencies": {
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-react": "^6.24.1",
-        "bootstrap": "^4.3.1",
-        "react": "^16.8.4",
-        "react-bootstrap": "^1.0.0-beta.8",
-        "react-dom": "^16.8.4",
-        "react-scripts": "^2.1.8"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
-    ]
+  "name": "RGU_Honours_Project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": "https://github.com/LiamCottrell/RGU-Honours-Project.git",
+  "author": "Liam Cottrell <liamcottrell@hotmail.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }

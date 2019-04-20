@@ -1,0 +1,62 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 10.07.2015 14:01:10
+
+newmtl 367a9436_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.700000 0.700000 0.700000
+	Kd 0.700000 0.700000 0.700000
+	Ks 0.100000 0.100000 0.100000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0001.dds
+	map_Kd /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0001.dds
+	
+
+newmtl 22d72d54_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.700000 0.700000 0.700000
+	Kd 0.700000 0.700000 0.700000
+	Ks 0.100000 0.100000 0.100000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0007.dds
+	map_Kd /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0007.dds
+	map_d /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0007.dds
+
+newmtl 0f622947_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.700000 0.700000 0.700000
+	Kd 0.700000 0.700000 0.700000
+	Ks 0.100000 0.100000 0.100000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0020.dds
+	map_Kd /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0020.dds
+	map_d /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0020.dds
+
+newmtl 10e660d9_dds
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.700000 0.700000 0.700000
+	Kd 0.700000 0.700000 0.700000
+	Ks 0.100000 0.100000 0.100000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0026.dds
+	map_Kd /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0026.dds
+	map_d /Users/liam/Documents/repos/RGU/Year 4/Proof_of_Concept/my-index/public/textures/texture_0026.dds
