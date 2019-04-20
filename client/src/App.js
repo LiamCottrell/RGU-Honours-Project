@@ -3,6 +3,7 @@ import React from 'react';
 import queryString from 'query-string'
 
 const _ = require('underscore');
+const randomColor = require('randomcolor'); // import the script
 
 
 class App extends React.Component {
@@ -47,7 +48,7 @@ class App extends React.Component {
 }
 
 
-class Boat extends React.Component {
+class EarthObj extends React.Component {
     render() {
         let myLat = null;
         let myLon = null;
@@ -61,6 +62,7 @@ class Boat extends React.Component {
         } else {
             myLon = this.props.Lon;
         }
+        let isBoat = this.props.boat;
         return (
             <a-entity a-location={
                 'lat:' + myLat + ';'
@@ -69,35 +71,26 @@ class Boat extends React.Component {
                 +'mode:relative;'
                 +'elevation:0'}
             >
-                <a-entity rotation="-90 0 0">
-                    <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
-                    </a-gltf-model>
-                    <a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>
-                </a-entity>
+                {
+                    isBoat ? (
+                            <Boat />
+                        )
+                        :
+                        (
+                            <Trace traceColour={this.props.traceColour} />
+                        )
+                }
+
             </a-entity>
         )
     }
 }
-
-class OldBoat extends React.Component {
-    render() {
-        return (
-            <a-entity a-location="lat:60.27432; lon:-1.08595; radius:0.15; mode:relative; elevation:0">
-                <a-entity rotation="-90 0 0">
-                    <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
-                    </a-gltf-model>
-                    <a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>
-                </a-entity>
-            </a-entity>
-        )
-    }
-}
-
-
 
 class Earth extends React.Component{
     render() {
-        let boats = this.props.data;
+        let boatPos = this.props.data;
+        let traceColour = randomColor();
+
         return (
             <a-entity id="world" position="0 0 -0.4" visible="true" a-terrain="
 	                observer:camera;
@@ -105,16 +98,53 @@ class Earth extends React.Component{
 	                observer:camera;
 	            ">
                 { this.props.data ? (
-                    Object.keys(boats).map(function(name, index){
-                        return (<Boat key={name} Lat={Object.values(boats)[index].Latitude} Lon={Object.values(boats)[index].Longitude}/>)
+                    Object.keys(boatPos).map(function(name, index){
+                        if (index !== (Object.values(boatPos).length - 1)){
+                            //Return Boat Traces
+                            return (<EarthObj
+                                        key={name}
+                                        boat={false}
+                                        traceColour={traceColour}
+                                        Lat={Object.values(boatPos)[index].Latitude}
+                                        Lon={Object.values(boatPos)[index].Longitude}
+                                    />)
+                        } else {
+                            //Return Boat Model Object
+                            return (<EarthObj
+                                        key={name}
+                                        boat={true}
+                                        Lat={Object.values(boatPos)[index].Latitude}
+                                        Lon={Object.values(boatPos)[index].Longitude}
+                                    />)
+                        }
                     })
                 ) : (
                     null
                 )
                 }
-                {/*<Boat />*/}
             </a-entity>
         )
+    }
+}
+
+class Boat extends React.Component{
+    render() {
+        return (
+            <a-entity rotation="-90 0 0">
+                <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
+                </a-gltf-model>
+                <a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>
+            </a-entity>
+        )
+    }
+}
+
+class Trace extends React.Component{
+    render() {
+        let traceColour = this.props.traceColour;
+        return (
+            <a-box scale="0.0006 0.0006 0.0006" color={traceColour}/>
+        );
     }
 }
 
@@ -164,8 +194,8 @@ class Camera extends React.Component{
 				        maxPolarAngle:3.04159265359;
 				        enableProportionalVelocity:true;
 				    ">
-                    <a-entity position="0 0 -0.2"
-                              geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.01;"
+                    <a-entity position="0 0 -0.05"
+                              geometry="primitive: ring; radiusInner: 0.0005; radiusOuter: 0.001;"
                               material="color: cyan; shader: flat"
                               cursor="maxDistance: 30; fuse: true">
                         <a-animation begin="click" easing="ease-in" attribute="scale" fill="forwards" from="0.2 0.2 0.2" to="1 1 1" dur="150"/>
