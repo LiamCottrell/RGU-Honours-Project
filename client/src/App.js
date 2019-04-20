@@ -49,6 +49,38 @@ class App extends React.Component {
 
 class Boat extends React.Component {
     render() {
+        let myLat = null;
+        let myLon = null;
+        if (!this.props.Lat){
+            myLat = 60.27432;
+        } else {
+            myLat = this.props.Lat
+        }
+        if (!this.props.Lon){
+            myLon = -1.08595;
+        } else {
+            myLon = this.props.Lon;
+        }
+        return (
+            <a-entity a-location={
+                'lat:' + myLat + ';'
+                +'lon:' + myLon + ';'
+                +'radius:0.15;'
+                +'mode:relative;'
+                +'elevation:0'}
+            >
+                <a-entity rotation="-90 0 0">
+                    <a-gltf-model ship-events scale="0.00002 0.00002 0.00002" src="boat.glb">
+                    </a-gltf-model>
+                    <a-animation begin="click" attribute="rotation" to="0 0 360" easing="linear" dur="2000" fill="backwards"/>
+                </a-entity>
+            </a-entity>
+        )
+    }
+}
+
+class OldBoat extends React.Component {
+    render() {
         return (
             <a-entity a-location="lat:60.27432; lon:-1.08595; radius:0.15; mode:relative; elevation:0">
                 <a-entity rotation="-90 0 0">
@@ -63,16 +95,24 @@ class Boat extends React.Component {
 
 
 
-
 class Earth extends React.Component{
     render() {
+        let boats = this.props.data;
         return (
             <a-entity id="world" position="0 0 -0.4" visible="true" a-terrain="
 	                observer:camera;
 	                radius:0.15;
 	                observer:camera;
 	            ">
-                <Boat />
+                { this.props.data ? (
+                    Object.keys(boats).map(function(name, index){
+                        return (<Boat key={name} Lat={Object.values(boats)[index].Latitude} Lon={Object.values(boats)[index].Longitude}/>)
+                    })
+                ) : (
+                    null
+                )
+                }
+                {/*<Boat />*/}
             </a-entity>
         )
     }

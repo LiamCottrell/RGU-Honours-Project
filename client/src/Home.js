@@ -2,6 +2,7 @@ import React from 'react';
 // const request = require('request');
 
 const _ = require('underscore');
+const geodist = require('geodist');
 
 
 class Home extends React.Component {
@@ -73,13 +74,30 @@ class BoatOptions extends React.Component {
     // Create a list of boat options from the dataset.
     render() {
         const { data } = this.state;
-        // console.log(data);
         const unique = _.countBy(data, function (o) {
             return o.MMSI;
         });
+
+        // Takes the first and the last known points and calculates the distance apart in miles
+        const distance = Object.keys(unique).map(function (name, index){
+            let rows = _.where(data, { MMSI: parseInt(name, 10) });
+            let quantityOfPoints = Object.keys(rows).length;
+            let firstPoint = {
+                lat: Object.values(rows)[0].Latitude,
+                lon: Object.values(rows)[0].Longitude,
+            };
+            let lastPoint = {
+                lat: Object.values(rows)[quantityOfPoints-1].Latitude,
+                lon: Object.values(rows)[quantityOfPoints-1].Longitude,
+            };
+            return geodist(firstPoint, lastPoint, {format: true, unit: 'miles'});
+        });
+
         // Return a list of option elements with the name of the MMSI and the quality of records.
         return Object.keys(unique).map(function (name, index) {
-            return <option key={name} value={Object.keys(unique)[index]}>`{Object.keys(unique)[index]}` locations({Object.values(unique)[index]})</option>
+            return <option key={name} value={Object.keys(unique)[index]}>`
+                {Object.keys(unique)[index]}` locations({Object.values(unique)[index]}), {Object.values(distance)[index]}
+            </option>
         });
     }
 }
