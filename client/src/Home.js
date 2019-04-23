@@ -15,7 +15,6 @@ class Home extends React.Component {
                         <nav className="nav nav-masthead justify-content-center">
                             <a className="nav-link active" href="/">Home</a>
                             <a className="nav-link" href="/world">World</a>
-                            <a className="nav-link" href="/contact">Contact</a>
                         </nav>
                     </div>
                 </header>
@@ -24,10 +23,15 @@ class Home extends React.Component {
                     <h1 className="cover-heading">Search for Boats.</h1>
                         <form action="world" method='get'>
                             <div className="form-group">
-                                <label htmlFor="exampleFormControlSelect1">Filter Boat by MMSI</label>
+                                <label htmlFor="boatmmsi">Filter Boat by MMSI</label>
                                 <select className="form-control" id="boatmmsi" name="MMSI">
                                     <option value=''>All</option>
                                     <BoatOptions/>
+                                </select>
+                                <label htmlFor="simpleSelect">Use Simple Boats</label>
+                                <select className="form-control" name="simple" id="simpleSelect">
+                                    <option value='false'>False</option>
+                                    <option value='true'>True</option>
                                 </select>
                             </div>
                             <button type="submit" className="btn btn-primary">Show Map</button>

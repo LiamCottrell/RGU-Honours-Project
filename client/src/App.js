@@ -5,6 +5,8 @@ import queryString from 'query-string'
 const _ = require('underscore');
 const randomColor = require('randomcolor'); // import the script
 
+let useSimple = false;
+
 
 class App extends React.Component {
     // Initialize the state
@@ -19,12 +21,13 @@ class App extends React.Component {
 
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
-
+        if (values.simple === 'true'){
+            useSimple = true
+        }
         if (values.MMSI) {
             this.getDataMMSI(values.MMSI);
         } else {
             this.getRandomShips();
-
         }
 
 
@@ -44,7 +47,7 @@ class App extends React.Component {
         fetch('/api/getData')
             .then(res => res.json())
             .then(tempData => this.setState({tempData}))
-            .then(data => this.chooseRandom(this.state.tempData, 20))
+            .then(data => this.chooseRandom(this.state.tempData, 10))
             .then(ships => this.setState({ships}))
             .then(data => this.getDataFromShip(this.state.tempData, this.state.ships))
             .then(data => this.setState({data}))
@@ -57,20 +60,17 @@ class App extends React.Component {
             result.forEach(function (allShip) {
                 tempObjs.push(allShip);
             });
-            // tempObjs.push(result);
         });
-        console.log('tempobj');
-        console.log(tempObjs);
         return tempObjs;
     };
 
 
     getShips = (data) => {
-        console.log(data);
+        // console.log(data);
         let items = _.countBy(data, function (o) {
             return o.MMSI
         });
-        console.log(items);
+        // console.log(items);
         return Object.keys(items).map(function (index) {
             return index;
         });
@@ -78,7 +78,7 @@ class App extends React.Component {
 
 
     chooseRandom = (data, quantity) => {
-        console.log(data);
+        // console.log(data);
         let items = _.countBy(data, function (o) {
             return o.MMSI
         });
@@ -93,11 +93,12 @@ class App extends React.Component {
         let {ships} = this.state;
         return (
             <a-scene ar stats>
-                {data ? (
-                    <Earth ships={ships} data={data}/>
-                ) : (
-                    <Earth/>
-                )
+                {
+                    data ? (
+                        <Earth ships={ships} data={data}/>
+                    ) : (
+                        <Earth/>
+                    )
                 }
                 <Popup/>
                 <Camera/>
@@ -122,20 +123,23 @@ class EarthObj extends React.Component {
             myLon = this.props.Lon;
         }
         let isBoat = this.props.boat;
+        // let colour = this.props.traceColour;
         return (
             <a-entity a-location={
                 'lat:' + myLat + ';'
                 + 'lon:' + myLon + ';'
-                + 'radius:0.15;'
+                + 'radius:0.6;'
                 + 'mode:relative;'
                 + 'elevation:0'}
             >
                 {
                     isBoat ? (
+                        useSimple ?(
+                            <SimpleBoat data={this.props.data} traceColour={this.props.traceColour}/>
+                            ) : (
                             <Boat data={this.props.data}/>
                         )
-                        :
-                        (
+                            ) : (
                             <Trace traceColour={this.props.traceColour}/>
                         )
                 }
@@ -150,12 +154,11 @@ class Earth extends React.Component {
         let boatPos = this.props.data;
         let ships = this.props.ships;
 
-        console.log(Object.keys(boatPos).map);
 
         return (
-            <a-entity id="world" position="0 0 -0.4" visible="true" a-terrain="
+            <a-entity id="world" position="0 -0.20 -0.5" visible="true" a-terrain="
 	                observer:camera;
-	                radius:0.15;
+	                radius:0.6;
 	                observer:camera;
 	            ">
 
@@ -166,7 +169,19 @@ class Earth extends React.Component {
                         ships.map(function (mmsi) {
                             let traceColour = randomColor();
                             // Create local object where Boats in data have the provided MMSI
-                            let singleShip = _.where(boatPos, {MMSI: parseInt(mmsi, 10)});
+                            let rawSingleShip = _.where(boatPos, {MMSI: parseInt(mmsi, 10)});
+                            console.log(rawSingleShip);
+                            let singleShip = [];
+                            if (rawSingleShip.length >= 25) {
+                                let maxVal = 25;
+                                let delta = Math.floor( rawSingleShip.length / maxVal );
+                                for (let i = 0; i < rawSingleShip.length; i=i+delta) {
+                                    singleShip.push(rawSingleShip[i]);
+                                }
+                                singleShip.push(rawSingleShip[rawSingleShip.length-1]);
+                            } else {
+                                singleShip = rawSingleShip;
+                            }
                             return (
                                 Object.keys(singleShip).map(function (index) {
                                     if ((Object.keys(singleShip).length - 1) !== parseInt(index)) {
@@ -183,6 +198,7 @@ class Earth extends React.Component {
                                         return (<EarthObj
                                             key={index + mmsi}
                                             boat={true}
+                                            traceColour={traceColour}
                                             data={Object.values(singleShip)[index]}
                                             Lat={Object.values(singleShip)[index].Latitude}
                                             Lon={Object.values(singleShip)[index].Longitude}
@@ -205,19 +221,41 @@ class Earth extends React.Component {
 class Boat extends React.Component {
     render() {
         return (
-            <a-entity rotation="-90 0 0">
+            <a-entity rotation="-90 0 0"
+                      data-mmsi={this.props.data.MMSI}
+                      data-recvtime={this.props.data.RecvTime.$date}
+                      data-posacc={this.props.data.PositionAccuracy}
+                      data-lat={this.props.data.Latitude}
+                      data-lon={this.props.data.Longitude}
+                      ship-events
+            >
                 <a-gltf-model
-                    data-mmsi={this.props.data.MMSI}
-                    data-recvtime={this.props.data.RecvTime.$date}
-                    data-posacc={this.props.data.PositionAccuracy}
-                    data-lat={this.props.data.Latitude}
-                    data-lon={this.props.data.Longitude}
-                    ship-events
                     scale="0.00002 0.00002 0.00002"
                     src="boat.glb"
                 />
             </a-entity>
         )
+    }
+}
+
+class SimpleBoat extends React.Component {
+    render() {
+        let traceColour = this.props.traceColour;
+        return (
+            <a-entity
+                data-mmsi={this.props.data.MMSI}
+                data-recvtime={this.props.data.RecvTime.$date}
+                data-posacc={this.props.data.PositionAccuracy}
+                data-lat={this.props.data.Latitude}
+                data-lon={this.props.data.Longitude}
+                ship-events
+            >
+                <a-box
+                    scale="0.004 0.004 0.004"
+                    color={traceColour}
+                />
+            </a-entity>
+        );
     }
 }
 
@@ -267,24 +305,17 @@ class Camera extends React.Component {
             <a-entity id="cameraRig">
                 <a-entity
                     id="camera"
-                    camera="fov: 45; near:5; far:10"
-                    position="0 0 0"
-                    orbit-controls="
-				        target: #world;
-				        minDistance:1000;
-				        maxDistance:5000;
-				        minPolarAngle:0.1;
-				        maxPolarAngle:3.04159265359;
-				        enableProportionalVelocity:true;
-				    ">
-                    <a-entity position="0 0 -0.05"
-                              geometry="primitive: ring; radiusInner: 0.0005; radiusOuter: 0.001;"
-                              material="color: cyan; shader: flat"
-                              cursor="maxDistance: 30; fuse: true">
-                        <a-animation begin="click" easing="ease-in" attribute="scale" fill="forwards" from="0.2 0.2 0.2"
-                                     to="1 1 1" dur="150"/>
-                        <a-animation begin="fusing" easing="ease-in" attribute="scale" fill="backwards" from="1 1 1"
-                                     to="0.2 0.2 0.2" dur="1500"/>
+                    camera="fov: 45; near:1; far:10"
+                    position="0 0 0">
+
+                        <a-entity position="0 0 -0.05"
+                                  geometry="primitive: ring; radiusInner: 0.0005; radiusOuter: 0.001;"
+                                  material="color: cyan; shader: flat"
+                                  cursor="maxDistance: 30; fuse: true">
+                            <a-animation begin="click" easing="ease-in" attribute="scale" fill="forwards" from="0.2 0.2 0.2"
+                                         to="1 1 1" dur="150"/>
+                            <a-animation begin="fusing" easing="ease-in" attribute="scale" fill="backwards" from="1 1 1"
+                                         to="0.2 0.2 0.2" dur="1500"/>
                     </a-entity>
                 </a-entity>
             </a-entity>

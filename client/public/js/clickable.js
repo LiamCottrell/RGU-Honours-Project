@@ -6,7 +6,7 @@ AFRAME.registerComponent('ship-events', {
             $('#shipPopup').modal('show');
 
             let mmsi = el.getAttribute('data-MMSI');
-            let ship = document.querySelector("a-gltf-model[data-mmsi='"+ mmsi +"']");
+            let ship = document.querySelector("a-entity[data-mmsi='"+ mmsi +"']");
 
             $('#shipContent').html(JSON.stringify(ship.dataset));
         });

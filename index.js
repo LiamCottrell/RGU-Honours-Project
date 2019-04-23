@@ -8,7 +8,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 // An api endpoint that returns a short list of items
 app.get('/api/getData', (req,res) => {
-    const data = require('./data/export.10000.json');
+    const data = require('./data/export.500000.json');
     // var list = ["item1", "item2", "item3"];
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5000');
     res.json(data);
