@@ -1,8 +1,8 @@
 import React from 'react';
 // const request = require('request');
 
-const _ = require('underscore');
-const geodist = require('geodist');
+// const _ = require('underscore');
+// const geodist = require('geodist');
 
 
 class Home extends React.Component {
@@ -71,36 +71,18 @@ class BoatOptions extends React.Component {
     }
     // Retrieves the list of items from the Express app
     getData = () => {
-        fetch('/api/getData')
+        fetch('/api/getData/distanceList')
             .then(res => res.json())
             .then(data => this.setState({ data }))
     };
     // Create a list of boat options from the dataset.
     render() {
         const { data } = this.state;
-        const unique = _.countBy(data, function (o) {
-            return o.MMSI;
-        });
-
-        // Takes the first and the last known points and calculates the distance apart in miles
-        const distance = Object.keys(unique).map(function (name, index){
-            let rows = _.where(data, { MMSI: parseInt(name, 10) });
-            let quantityOfPoints = Object.keys(rows).length;
-            let firstPoint = {
-                lat: Object.values(rows)[0].Latitude,
-                lon: Object.values(rows)[0].Longitude,
-            };
-            let lastPoint = {
-                lat: Object.values(rows)[quantityOfPoints-1].Latitude,
-                lon: Object.values(rows)[quantityOfPoints-1].Longitude,
-            };
-            return geodist(firstPoint, lastPoint, {format: true, unit: 'miles'});
-        });
-
         // Return a list of option elements with the name of the MMSI and the quality of records.
-        return Object.keys(unique).map(function (name, index) {
-            return <option key={name} value={Object.keys(unique)[index]}>`
-                {Object.keys(unique)[index]}` locations({Object.values(unique)[index]}), {Object.values(distance)[index]}
+        return Object.keys(data).map(function (name, index) {
+            // console.log(Object.values(data)[index].MMSI);
+            return <option key={name} value={Object.values(data)[index].MMSI}>`
+                {Object.values(data)[index].MMSI}` locations({Object.values(data)[index].qty_locations}), {Object.values(data)[index].distance +' miles.'}
             </option>
         });
     }
