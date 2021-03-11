@@ -9,7 +9,7 @@
   "author": "Liam Cottrell <liamcottrell@hotmail.co.uk>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "geodist": "^0.2.1",
     "underscore": "^1.12.0"
