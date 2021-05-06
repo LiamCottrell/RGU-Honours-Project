@@ -12,6 +12,6 @@
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "geodist": "^0.2.1",
-    "underscore": "^1.12.0"
+    "underscore": "^1.12.1"
   }
 }
